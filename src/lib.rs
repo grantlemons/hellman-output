@@ -36,6 +36,12 @@ impl HellmanOutput {
         let new_addition = &format!(":{}: ", s);
         Self(self.0.clone() + new_addition)
     }
+
+    /// Push a textual element to the output string, translated with alphabet encoding
+    pub fn push_alphabet_encode(&self, s: &str) -> Self {
+        let new_addition = &format!(":{}: ", alphabet_encoding::encode(s.to_owned()));
+        Self(self.0.clone() + new_addition)
+    }
 }
 
 #[cfg(test)]
