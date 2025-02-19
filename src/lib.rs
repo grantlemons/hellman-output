@@ -1,14 +1,36 @@
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
+use std::{fmt::Display, str::FromStr, string::ParseError};
+
+#[derive(Clone, PartialEq, Eq, PartialOrd, Ord)]
+pub struct HellmanOutput(String);
+
+impl Default for HellmanOutput {
+    fn default() -> Self {
+        Self("OUTPUT".to_string())
+    }
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+impl FromStr for HellmanOutput {
+    type Err = ParseError;
 
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(Self::default().push_str(s))
+    }
+}
+
+impl Display for HellmanOutput {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.0)
+    }
+}
+
+impl HellmanOutput {
+    pub fn push_numeric(&self, num: isize) -> Self {
+        let num_str = &format!(" {} ", num);
+        Self(self.0.clone() + num_str)
+    }
+
+    pub fn push_str(&self, s: &str) -> Self {
+        let new_addition = &format!(" :{}: ", s);
+        Self(self.0.clone() + new_addition)
     }
 }
