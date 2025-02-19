@@ -2,7 +2,7 @@
 name = "hellman-output"
 description = "A format of outputting."
 repository = "https://github.com/grantlemons/hellman-output"
-version = "0.2.0"
+version = "0.3.0"
 edition = "2021"
 license = "AGPL-3.0-only"
 
