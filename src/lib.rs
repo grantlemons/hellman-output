@@ -25,7 +25,8 @@ impl Display for HellmanOutput {
 
 impl HellmanOutput {
     /// Push a number to the output string
-    pub fn push_numeric(&self, num: isize) -> Self {
+    /// Accepts anything that implements Display
+    pub fn push_numeric(&self, num: impl Display) -> Self {
         let num_str = &format!("{} ", num);
         Self(self.0.clone() + num_str)
     }
@@ -34,5 +35,48 @@ impl HellmanOutput {
     pub fn push_str(&self, s: &str) -> Self {
         let new_addition = &format!(":{}: ", s);
         Self(self.0.clone() + new_addition)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use std::str::FromStr;
+
+    use crate::HellmanOutput;
+
+    #[test]
+    fn from_string() {
+        let s = "Fresh Avacado";
+
+        assert_eq!(
+            &HellmanOutput::from_str(s).unwrap().to_string(),
+            "OUTPUT :Fresh Avacado:"
+        );
+    }
+
+    #[test]
+    fn push_string() {
+        let s = "Fresh Avacado";
+        let output = &HellmanOutput::default().push_str(s).push_str(s);
+
+        assert_eq!(
+            &output.to_string(),
+            "OUTPUT :Fresh Avacado: :Fresh Avacado:"
+        );
+    }
+
+    #[test]
+    fn push_numeric() {
+        let s = "Fresh Avacado";
+        let output = &HellmanOutput::default()
+            .push_str(s)
+            .push_numeric(13)
+            .push_str(s)
+            .push_numeric(1.1);
+
+        assert_eq!(
+            &output.to_string(),
+            "OUTPUT :Fresh Avacado: 13 :Fresh Avacado: 1.1"
+        );
     }
 }
